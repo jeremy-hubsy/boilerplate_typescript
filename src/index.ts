@@ -1,7 +1,7 @@
 import { payments, Spendings, SpendingsPerCat, UnusualSpendings } from "./seed";
 import { Payment } from "./seed";
-import { totalPerCategory } from "./lib";
-import { getPreviousMonth } from "./lib";
+import { totalPerCategory } from "./utils";
+import { getPreviousMonth } from "./utils";
 
 export function getPayments(userId: number): Payment[] | [] {
   const userPayments = payments.filter((element) => element.userId === userId);
