@@ -8,6 +8,30 @@ export type Payment = {
 
 export type Category = "Loisir" | "Education" | "Restaurant";
 
+export type Spendings = {
+  spendingCurrentMonth: Payment[];
+  spendingPreviousMonth: Payment[];
+};
+
+export type SpendingsPerCat = {
+  totalCurrentMonth: {
+    loisirCurrentMonth: number;
+    educationCurrentMonth: number;
+    restaurantCurrentMonth: number;
+  };
+  totalPreviousMonth: {
+    loisirPreviousMonth: number;
+    educationPreviousMonth: number;
+    restaurantPreviousMonth: number;
+  };
+};
+
+export type UnusualSpendings = {
+  loisir: number;
+  education: number;
+  restaurant: number;
+};
+
 const payments: Payment[] = [
   {
     category: "Loisir",

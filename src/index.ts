@@ -1,13 +1,13 @@
-import { payments } from "./seed";
+import { payments, Spendings, SpendingsPerCat, UnusualSpendings } from "./seed";
 import { Category } from "./seed";
 import { Payment } from "./seed";
 
-export function getPayments(userId: number) {
+export function getPayments(userId: number): Payment[] | [] {
   const userPayments = payments.filter((element) => element.userId === userId);
   return userPayments.length ? userPayments : [];
 }
 
-export function getMonthlyPayments(userId: number) {
+export function getMonthlyPayments(userId: number): Spendings {
   const userPayments = getPayments(userId);
   // dates
   const today = new Date();
@@ -27,7 +27,7 @@ export function getMonthlyPayments(userId: number) {
   };
 }
 
-export function getSpendingsPerCategory(userId: number) {
+export function getSpendingsPerCategory(userId: number): SpendingsPerCat {
   const { spendingCurrentMonth, spendingPreviousMonth } =
     getMonthlyPayments(userId);
 
@@ -67,7 +67,7 @@ export function getSpendingsPerCategory(userId: number) {
   };
 }
 
-export function unusualSpendings(userId: number) {
+export function unusualSpendings(userId: number): UnusualSpendings {
   const { totalCurrentMonth, totalPreviousMonth } =
     getSpendingsPerCategory(userId);
 
@@ -103,7 +103,7 @@ export function unusualSpendings(userId: number) {
   };
 }
 
-export function composeEmail(userId: number) {
+export function composeEmail(userId: number): string | null {
   const { loisir, education, restaurant } = unusualSpendings(userId);
 
   const totalExpenses = loisir + education + restaurant;
@@ -118,17 +118,17 @@ export function composeEmail(userId: number) {
   return null;
 }
 
-function totalPerCategory(spendings, category) {
+function totalPerCategory(spendings: Payment[], category: Category): number {
   return spendings
     .filter((element) => element.category === category)
     .reduce((acc, curr) => acc + curr.price, 0);
 }
 
-function getPreviousMonth(d) {
+function getPreviousMonth(d: Date) {
   var newMonth = d.getMonth() - 1;
   if (newMonth < 0) {
     newMonth += 12;
-    d.setYear(d.getFullYear() - 1); // use getFullYear instead of getYear !
+    d.setFullYear(d.getFullYear() - 1);
   }
   d.setMonth(newMonth);
 
