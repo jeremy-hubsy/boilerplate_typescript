@@ -1,6 +1,7 @@
 import { payments, Spendings, SpendingsPerCat, UnusualSpendings } from "./seed";
-import { Category } from "./seed";
 import { Payment } from "./seed";
+import { totalPerCategory } from "./lib";
+import { getPreviousMonth } from "./lib";
 
 export function getPayments(userId: number): Payment[] | [] {
   const userPayments = payments.filter((element) => element.userId === userId);
@@ -116,21 +117,4 @@ export function composeEmail(userId: number): string | null {
     } Love, The Credit Card Company`;
   }
   return null;
-}
-
-function totalPerCategory(spendings: Payment[], category: Category): number {
-  return spendings
-    .filter((element) => element.category === category)
-    .reduce((acc, curr) => acc + curr.price, 0);
-}
-
-function getPreviousMonth(d: Date) {
-  var newMonth = d.getMonth() - 1;
-  if (newMonth < 0) {
-    newMonth += 12;
-    d.setFullYear(d.getFullYear() - 1);
-  }
-  d.setMonth(newMonth);
-
-  return d.getMonth();
 }
