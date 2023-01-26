@@ -17,7 +17,13 @@ describe("getPayments", () => {
         description: "",
         userId: 1,
       },
-
+      {
+        category: "Loisir",
+        price: 91,
+        date: new Date("2021-12-26T10:58:18.363Z"),
+        description: "",
+        userId: 1,
+      },
       {
         category: "Education",
         price: 68,
@@ -25,7 +31,6 @@ describe("getPayments", () => {
         description: "",
         userId: 1,
       },
-
       {
         category: "Loisir",
         price: 230,

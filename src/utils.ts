@@ -16,7 +16,7 @@ export function totalPerCategory(
   }, {});
 }
 
-export function getPreviousMonth(d: Date): number {
+export function getPreviousMonth(d: Date) {
   var newMonth = d.getMonth() - 1;
   if (newMonth < 0) {
     newMonth += 12;
@@ -24,7 +24,7 @@ export function getPreviousMonth(d: Date): number {
   }
   d.setMonth(newMonth);
 
-  return d.getMonth();
+  return d;
 }
 
 export function getObjectKeys(payments: Payment[]) {

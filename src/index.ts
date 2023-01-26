@@ -14,13 +14,19 @@ export function getMonthlyPayments(userId: number): Spendings {
   // dates
   const today: Date = new Date();
   const currentMonth: number = today.getMonth();
-  const previousMonth: number = getPreviousMonth(today);
+  const currentYear = today.getFullYear();
+  const previousMonth = getPreviousMonth(today);
 
   const spendingCurrentMonth: Payment[] = userPayments.filter(
-    (element) => currentMonth === element.date.getMonth()
+    (element) =>
+      currentMonth === element.date.getMonth() &&
+      element.date.getFullYear() === currentYear
   );
+
   const spendingPreviousMonth: Payment[] = userPayments.filter(
-    (element) => previousMonth === new Date(element.date).getMonth()
+    (element) =>
+      previousMonth.getMonth() === new Date(element.date).getMonth() &&
+      previousMonth.getFullYear() === new Date(element.date).getFullYear()
   );
 
   return {
