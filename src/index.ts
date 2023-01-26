@@ -14,8 +14,8 @@ export function getMonthlyPayments(userId: number): Spendings {
   // dates
   const today: Date = new Date();
   const currentMonth: number = today.getMonth();
-  const currentYear = today.getFullYear();
-  const previousMonth = getPreviousMonth(today);
+  const currentYear: number = today.getFullYear();
+  const previousMonth: Date = getPreviousMonth(today);
 
   const spendingCurrentMonth: Payment[] = userPayments.filter(
     (element) =>
