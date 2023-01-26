@@ -140,14 +140,12 @@ describe("highestExpenses", () => {
   it("should return the total per category", () => {
     expect(getSpendingsPerCategory(1)).toEqual({
       totalCurrentMonth: {
-        loisirCurrentMonth: 308,
-        educationCurrentMonth: 0,
-        restaurantCurrentMonth: 0,
+        Loisir: 308,
       },
       totalPreviousMonth: {
-        loisirPreviousMonth: 91,
-        educationPreviousMonth: 68,
-        restaurantPreviousMonth: 83,
+        Loisir: 91,
+        Education: 68,
+        Restaurant: 83,
       },
     });
   });
@@ -156,9 +154,11 @@ describe("highestExpenses", () => {
 describe("unusualSpendings", () => {
   it("should return the categories for which the user spent at least 50% more this month than last month", () => {
     expect(unusualSpendings(1)).toEqual({
-      loisir: 308,
-      education: 0,
-      restaurant: 0,
+      totalCurrentMonth: {
+        Loisir: 308,
+        Education: 0,
+        Restaurant: 0,
+      },
     });
   });
 });

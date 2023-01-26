@@ -14,16 +14,8 @@ export type Spendings = {
 };
 
 export type SpendingsPerCat = {
-  totalCurrentMonth: {
-    loisirCurrentMonth: number;
-    educationCurrentMonth: number;
-    restaurantCurrentMonth: number;
-  };
-  totalPreviousMonth: {
-    loisirPreviousMonth: number;
-    educationPreviousMonth: number;
-    restaurantPreviousMonth: number;
-  };
+  totalCurrentMonth: Record<number, Category>;
+  totalPreviousMonth?: Record<number, Category>;
 };
 
 export type UnusualSpendings = {

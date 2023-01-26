@@ -1,7 +1,14 @@
-import { payments, Spendings, SpendingsPerCat, UnusualSpendings } from "./seed";
+import {
+  Category,
+  payments,
+  Spendings,
+  SpendingsPerCat,
+  UnusualSpendings,
+} from "./seed";
 import { Payment } from "./seed";
 import { totalPerCategory } from "./utils";
 import { getPreviousMonth } from "./utils";
+import { getObjectKeys } from "./utils";
 
 export function getPayments(userId: number): Payment[] | [] {
   const userPayments = payments.filter((element) => element.userId === userId);
@@ -32,88 +39,49 @@ export function getSpendingsPerCategory(userId: number): SpendingsPerCat {
   const { spendingCurrentMonth, spendingPreviousMonth } =
     getMonthlyPayments(userId);
 
-  const loisirCurrentMonth = totalPerCategory(spendingCurrentMonth, "Loisir");
-  const educationCurrentMonth = totalPerCategory(
-    spendingCurrentMonth,
-    "Education"
-  );
+  const currSpendings = totalPerCategory(spendingCurrentMonth);
 
-  const restaurantCurrentMonth = totalPerCategory(
-    spendingCurrentMonth,
-    "Restaurant"
-  );
-
-  const loisirPreviousMonth = totalPerCategory(spendingPreviousMonth, "Loisir");
-  const educationPreviousMonth = totalPerCategory(
-    spendingPreviousMonth,
-    "Education"
-  );
-
-  const restaurantPreviousMonth = totalPerCategory(
-    spendingPreviousMonth,
-    "Restaurant"
-  );
+  const prevSprendings = totalPerCategory(spendingPreviousMonth);
 
   return {
-    totalCurrentMonth: {
-      loisirCurrentMonth,
-      educationCurrentMonth,
-      restaurantCurrentMonth,
-    },
-    totalPreviousMonth: {
-      loisirPreviousMonth,
-      educationPreviousMonth,
-      restaurantPreviousMonth,
-    },
+    totalCurrentMonth: currSpendings,
+    totalPreviousMonth: prevSprendings,
   };
 }
 
-export function unusualSpendings(userId: number): UnusualSpendings {
+export function unusualSpendings(userId: number): SpendingsPerCat {
   const { totalCurrentMonth, totalPreviousMonth } =
     getSpendingsPerCategory(userId);
 
-  let loisir = 0;
-  let education = 0;
-  let restaurant = 0;
+  const obj = getObjectKeys(payments);
 
-  if (
-    totalCurrentMonth.loisirCurrentMonth >=
-    totalPreviousMonth.loisirPreviousMonth * 1.5
-  ) {
-    loisir = totalCurrentMonth.loisirCurrentMonth;
-  }
-
-  if (
-    totalCurrentMonth.educationCurrentMonth >=
-    totalPreviousMonth.educationPreviousMonth * 1.5
-  ) {
-    education = totalCurrentMonth.educationCurrentMonth;
-  }
-
-  if (
-    totalCurrentMonth.restaurantCurrentMonth >=
-    totalPreviousMonth.restaurantPreviousMonth * 1.5
-  ) {
-    restaurant = totalCurrentMonth.restaurantCurrentMonth;
+  for (let cat in obj) {
+    totalCurrentMonth[cat] >= totalPreviousMonth[cat] * 1.5
+      ? (obj[cat] = totalCurrentMonth[cat])
+      : obj[cat];
   }
 
   return {
-    loisir,
-    education,
-    restaurant,
+    totalCurrentMonth: obj,
   };
 }
 
 export function composeEmail(userId: number): string | null {
-  const { loisir, education, restaurant } = unusualSpendings(userId);
+  const obj = unusualSpendings(userId).totalCurrentMonth;
 
-  const totalExpenses = loisir + education + restaurant;
+  let totalExpenses = 0;
+
+  for (let cat in obj) {
+    totalExpenses += +obj[cat];
+  }
 
   if (totalExpenses) {
     return `Subject : Unusual spending of $${totalExpenses} detected! Hello card user! We have detected unusually high spending on your card in these categories: ${
-      loisir ? `* You spent ${loisir} on loisir` : null
-    } ${education ? `* You spent ${education} on education` : ""} ${
-      restaurant ? `* You spent ${restaurant} on restaurant` : ""
+      obj["Loisir"] ? `* You spent ${obj["Loisir"]} on loisir` : null
+    } ${
+      obj["Education"] ? `* You spent ${obj["Education"]} on education` : ""
+    } ${
+      obj["Restaurant"] ? `* You spent ${obj["Restaurant"]} on restaurant` : ""
     } Love, The Credit Card Company`;
   }
   return null;
