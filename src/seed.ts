@@ -18,12 +18,6 @@ export type SpendingsPerCat = {
   totalPreviousMonth?: Record<number, Category>;
 };
 
-export type UnusualSpendings = {
-  loisir: number;
-  education: number;
-  restaurant: number;
-};
-
 const payments: Payment[] = [
   {
     category: "Loisir",

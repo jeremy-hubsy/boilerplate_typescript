@@ -1,10 +1,4 @@
-import {
-  Category,
-  payments,
-  Spendings,
-  SpendingsPerCat,
-  UnusualSpendings,
-} from "./seed";
+import { Category, payments, Spendings, SpendingsPerCat } from "./seed";
 import { Payment } from "./seed";
 import { totalPerCategory } from "./utils";
 import { getPreviousMonth } from "./utils";
@@ -18,14 +12,14 @@ export function getPayments(userId: number): Payment[] | [] {
 export function getMonthlyPayments(userId: number): Spendings {
   const userPayments = getPayments(userId);
   // dates
-  const today = new Date();
-  const currentMonth = new Date().getMonth();
-  const previousMonth = getPreviousMonth(today);
+  const today: Date = new Date();
+  const currentMonth: number = today.getMonth();
+  const previousMonth: number = getPreviousMonth(today);
 
-  const spendingCurrentMonth = userPayments.filter(
+  const spendingCurrentMonth: Payment[] = userPayments.filter(
     (element) => currentMonth === element.date.getMonth()
   );
-  const spendingPreviousMonth = userPayments.filter(
+  const spendingPreviousMonth: Payment[] = userPayments.filter(
     (element) => previousMonth === new Date(element.date).getMonth()
   );
 
@@ -39,9 +33,12 @@ export function getSpendingsPerCategory(userId: number): SpendingsPerCat {
   const { spendingCurrentMonth, spendingPreviousMonth } =
     getMonthlyPayments(userId);
 
-  const currSpendings = totalPerCategory(spendingCurrentMonth);
+  const currSpendings: Record<number, Category> =
+    totalPerCategory(spendingCurrentMonth);
 
-  const prevSprendings = totalPerCategory(spendingPreviousMonth);
+  const prevSprendings: Record<number, Category> = totalPerCategory(
+    spendingPreviousMonth
+  );
 
   return {
     totalCurrentMonth: currSpendings,
@@ -67,7 +64,8 @@ export function unusualSpendings(userId: number): SpendingsPerCat {
 }
 
 export function composeEmail(userId: number): string | null {
-  const obj = unusualSpendings(userId).totalCurrentMonth;
+  const obj: Record<number, Category> =
+    unusualSpendings(userId).totalCurrentMonth;
 
   let totalExpenses = 0;
 

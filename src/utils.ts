@@ -1,7 +1,8 @@
-import { Category } from "./seed";
-import { Payment } from "./seed";
+import { Payment, SpendingsPerCat } from "./seed";
 
-export function totalPerCategory(arr) {
+export function totalPerCategory(
+  arr: Payment[]
+): SpendingsPerCat["totalCurrentMonth"] {
   return Array.from(
     arr.reduce(
       (m, { category, price }) =>
@@ -26,7 +27,7 @@ export function getPreviousMonth(d: Date): number {
   return d.getMonth();
 }
 
-export function getObjectKeys(payments) {
+export function getObjectKeys(payments: Payment[]) {
   return payments.reduce((acc, val) => {
     acc[val.category] = 0;
     return acc;
