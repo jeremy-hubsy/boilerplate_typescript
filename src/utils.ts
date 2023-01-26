@@ -12,6 +12,7 @@ export function totalPerCategory(
     ([category, price]) => ({ category, price })
   ).reduce((acc, val) => {
     acc[val.category] = val.price;
+    console.log(acc);
     return acc;
   }, {});
 }
@@ -22,7 +23,9 @@ export function getPreviousMonth(d: Date): Date {
   return d;
 }
 
-export function getObjectKeys(payments: Payment[]) {
+export function getObjectKeys(
+  payments: Payment[]
+): SpendingsPerCat["totalCurrentMonth"] {
   return payments.reduce((acc, val) => {
     acc[val.category] = 0;
     return acc;

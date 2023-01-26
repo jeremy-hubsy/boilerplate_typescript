@@ -59,7 +59,8 @@ export function unusualSpendings(userId: number): SpendingsPerCat {
   const obj = getObjectKeys(payments);
 
   for (let cat in obj) {
-    totalCurrentMonth[cat] >= totalPreviousMonth[cat] * 1.5
+    totalCurrentMonth[cat as "price"] >=
+    totalPreviousMonth[cat as "price"] * 1.5
       ? (obj[cat] = totalCurrentMonth[cat])
       : obj[cat];
   }
