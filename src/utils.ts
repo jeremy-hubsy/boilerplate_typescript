@@ -17,13 +17,8 @@ export function totalPerCategory(
 }
 
 export function getPreviousMonth(d: Date) {
-  var newMonth = d.getMonth() - 1;
-  if (newMonth < 0) {
-    newMonth += 12;
-    d.setFullYear(d.getFullYear() - 1);
-  }
-  d.setMonth(newMonth);
-
+  d.setDate(1);
+  d.setMonth(d.getMonth() - 1);
   return d;
 }
 
